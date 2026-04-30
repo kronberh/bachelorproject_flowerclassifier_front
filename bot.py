@@ -73,7 +73,7 @@ async def classify_photo(message: Message, bot: Bot):
     response = requests.get(f'{API_ENDPOINT}/flowers/{flower_id + 1}/?format=json')
     if response.status_code == 200:
         flower_data = response.json()
-        text = f'With a probability of {(confidence * 100):.1f}%, this is <b>{flower_data['name']}</b>'
+        text = f'With a probability of <b>{(confidence * 100):.1f}%</b>, this is <b>{flower_data['name']}</b>'
         
         if data['answer_completeness'] == AnswerCompleteness.SHORT.value.id:
             text += f'\n<i>{flower_data['short_description']}</i>'
@@ -196,7 +196,7 @@ async def privacy_permission_selected_handler(callback: CallbackQuery):
     choice = callback.data.removeprefix('privacy_permission_')
     if choice == 'settings':
         await callback.message.edit_text(
-            text='Flower Classifier Bot can use your images to improve the quality of the neural network model. Your images will be processed immediately after classification process, and never stored or transitioned to third parties.\nYou can toggle this permission at any time.',
+            text='Flower Classifier Bot can use your images to improve the quality of the neural network model. Your images will be stored in remote server after classification, deleted after training cycle at 0:00 UTC, and never transitioned to third parties.\nYou can toggle this permission at any time.',
             reply_markup=privacy_keyboard(API_ENDPOINT, callback)
         )
     else:
