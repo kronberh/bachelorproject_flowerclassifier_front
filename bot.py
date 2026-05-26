@@ -8,7 +8,6 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.enums import ParseMode
 from aiogram.filters import Command
 from aiogram import Bot, Dispatcher, F, Router
-from aiohttp import TCPConnector
 from aiogram.client.session.aiohttp import AiohttpSession
 
 from enums import AnswerCompleteness
@@ -215,8 +214,8 @@ async def fallback_handler(message: Message):
 
 # Main thread
 async def main() -> None:
-    connector = TCPConnector(family=socket.AF_INET, ssl=False)
-    session = AiohttpSession(connector=connector)
+    session = AiohttpSession()
+    session._connector_init = { 'family': socket.AF_INET, 'ssl': False }
     bot = Bot(token=BOT_TOKEN, session=session)
     await dp.start_polling(bot)
 
