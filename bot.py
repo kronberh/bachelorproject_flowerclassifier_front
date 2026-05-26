@@ -1,5 +1,4 @@
 import os
-import socket
 import asyncio
 import requests
 import tempfile
@@ -8,7 +7,6 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.enums import ParseMode
 from aiogram.filters import Command
 from aiogram import Bot, Dispatcher, F, Router
-from aiogram.client.session.aiohttp import AiohttpSession
 
 from enums import AnswerCompleteness
 from keyboards import learn_more_keyboard, probability_threshold_keyboard, settings_keyboard, answer_completeness_keyboard, privacy_keyboard
@@ -19,6 +17,7 @@ BOT_TOKEN = os.environ.get('BOT_TOKEN')
 API_ENDPOINT = os.environ.get('API_ENDPOINT')
 MODEL_ENDPOINT = os.environ.get('MODEL_ENDPOINT')
 
+bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 router = Router()
 
@@ -214,9 +213,6 @@ async def fallback_handler(message: Message):
 
 # Main thread
 async def main() -> None:
-    session = AiohttpSession()
-    session._connector_init = { 'family': socket.AF_INET, 'ssl': False }
-    bot = Bot(token=BOT_TOKEN, session=session)
     await dp.start_polling(bot)
 
 async def on_startup(bot: Bot):
