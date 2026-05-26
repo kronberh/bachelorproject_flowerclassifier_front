@@ -20,9 +20,6 @@ BOT_TOKEN = os.environ.get('BOT_TOKEN')
 API_ENDPOINT = os.environ.get('API_ENDPOINT')
 MODEL_ENDPOINT = os.environ.get('MODEL_ENDPOINT')
 
-connector = TCPConnector(family=socket.AF_INET, ssl=False)
-session = AiohttpSession(connector=connector)
-bot = Bot(token=BOT_TOKEN, session=session)
 dp = Dispatcher()
 router = Router()
 
@@ -218,6 +215,9 @@ async def fallback_handler(message: Message):
 
 # Main thread
 async def main() -> None:
+    connector = TCPConnector(family=socket.AF_INET, ssl=False)
+    session = AiohttpSession(connector=connector)
+    bot = Bot(token=BOT_TOKEN, session=session)
     await dp.start_polling(bot)
 
 async def on_startup(bot: Bot):
